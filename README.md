@@ -22,10 +22,10 @@ Simulations team lab journal for daily logs and procedure list.
  2. Open the current week's file in the `daily` folder under your subteam with
     your prefered text editor.
  3. Add a level 3 header under that day's date with your name.
- 4. Write what you that day under your new subsecion.
+ 4. Write what you did that day under your new subsecion.
  5. Add file, commit, push
 
-## List of procedures
+## Procedures
 
  * [Installing Rosetta](procedures/rosetta_installation.md)
 
