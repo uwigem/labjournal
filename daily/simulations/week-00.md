@@ -9,7 +9,7 @@
    creation of each weeks journal file. Doing it by hand probably would have
    been faster, but not nearly as cool.
 
-[1]: https://github.com/uwigem/labjournal/tree/master/daily/simulatoins/mkweeks.sh
+[1]: https://github.com/uwigem/labjournal/blob/master/daily/simulations/mkweeks.sh
 
 ## Saturday, June 16
 
