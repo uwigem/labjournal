@@ -12,6 +12,7 @@
 * Read papers on toggle switch and represillator
 * Trying to model toggle switch in Tellurium
 * Read [this doc](http://isn.ucsd.edu/classes/beng221/problems/2013/project-1-A%20Mathematical%20Model%20of%20a%20Synthetically%20Constructed%20Genetic%20Toggle%20Switch.pdf) about toggle switch math. Doc has full matlab code.
+* Made agenda for meeting
 
 ## Tuesday, June 26
 
