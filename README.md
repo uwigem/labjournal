@@ -1,8 +1,8 @@
 # labjournal
 
-Simulations team lab journal for daily logs and procedure list.
+Team lab journal for daily logs and procedure list.
 
-## Daily Journals
+## Daily Journals for Simulations Team
 
  * [Week  0](daily/simulations/week-00.md)
  * [Week  1](daily/simulations/week-01.md)
