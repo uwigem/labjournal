@@ -7,7 +7,7 @@ Apart from that, simulations is also one of the gold medal criteria. To get a go
 
 ### Tellurium
 [Tellurium](https://tellurium.readthedocs.io/en/latest/index.html) is a python environment developed for dynamically modeling biological networks. 
-[](/images/tellurium-example-1.png) [](/images/tellurium-example-2.png)
+![](/images/tellurium-example-1.png) ![](/images/tellurium-example-2.png)
 Tellurium is open source and developed by Dr. Sauro, so we have plenty of resources to learn how to effectively use it. Tellurium is coded in C++ in the backend, so it's fast enough to be used for complex systems. It can model ODEs, PDEs, and stochastic differential equations. ODEs and PDEs are standard ways of modeling , and have a long history in iGEM competitions. In many ways, Tellurium is our substitute for an expensive multi-paradigm numerical computing system such MATLAB.
 
 Tellurium is most useful for understanding the kinetics of a system. Kinetics give us insight into how fast a reaction proceeds. When applied to a gene network, we gain insight into , how often a gene is transcribed, whether or not a system comes to a steady state, and how the system acts if it is perturbed. 
@@ -16,7 +16,7 @@ The classic understanding of the kinetics of a system is that the rate-limiting 
 
 ### Rosetta
 [Rosetta](https://www.rosettacommons.org/software) is a powerful command-line program for modeling protein folding developed at the UW's Baker lab.
-[](https://upload.wikimedia.org/wikipedia/commons/2/2b/T0281-bakerprediction_overlay.png)
+![](https://upload.wikimedia.org/wikipedia/commons/2/2b/T0281-bakerprediction_overlay.png)
 Proteins naturally fold into the lowest energy conformation. However, modeling this process on an atom-by-atom basis is NP-hard, and cannot be easily done without a supercomputer.
 
 Rosetta reduces the computational complexity by dividing the sequence into fragments and substituting known folding patterns of the fragments into the protein. Then, it tries random conformations in space and does a monte carlo simulation to find the lowest energy conformation. Essentially, it tries a random conformation and then makes a random change to it. If the change reduced the free energy, the simulation continues from the new conformation. If the change increased the free energy, the simulation reverts to the old conformation.
@@ -28,7 +28,7 @@ Rosetta may also have relevance as a side project for the team. We are trying to
 
 ### COMSOL
 [COMSOL Multiphysics](https://en.wikipedia.org/wiki/COMSOL_Multiphysics) is an industry-standard program for simulating electrical, chemical, acoustic, and fluid physics. COMSOL can be used for an expansive number of applications.  
-[Comsol Biosensor](images/comsol-example.png "Comsol Biosensor")
+![Comsol Biosensor](images/comsol-example.png "Comsol Biosensor")
 
 COMSOL is best used for modelling *in vitro* systems, as it doesn't have very good support for biological systems. If we were making an in vitro biosensor or a measurement device, however, COMSOL is very appropriate.
 
