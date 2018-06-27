@@ -13,6 +13,10 @@
 [1]: https://github.com/uwigem/labjournal/blob/master/daily/simulations/mkweeks.sh
 [2]: https://github.com/uwigem/labjournal/blob/master/README.md
 
+### Zack
+	
+* Figured out how to make entries to journal
+
 ## Saturday, June 16
 
 ## Sunday, June 17

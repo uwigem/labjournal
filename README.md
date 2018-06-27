@@ -1,8 +1,8 @@
 # labjournal
 
-Simulations team lab journal for daily logs and procedure list.
+Team lab journal for daily logs and procedure list.
 
-## Daily Journals
+## Daily Journals for Simulations Team
 
  * [Week  0](daily/simulations/week-00.md)
  * [Week  1](daily/simulations/week-01.md)
@@ -28,6 +28,7 @@ Simulations team lab journal for daily logs and procedure list.
 ## Procedures
 
  * [Installing Rosetta](procedures/rosetta_installation.md)
+ * [Making movies in Chimera](procedures/chimera_movie.md)
 
 ### Add a procedure
 
@@ -36,3 +37,25 @@ Simulations team lab journal for daily logs and procedure list.
  3. Add a link to it above, following the same format
  4. Include any pictures for your procedure in a sub-directory (ie procedures/rosetta_installation_pics)
  5. Push
+
+## Positions
+
+### Meeting Organizer: Kateka
+
+Plans and organizes meetings
+
+ * Ensure that everyone is aware of weekly meetings, times and location.
+ * Make whentomeet forums to plan events and meetings for the simulations team.
+ * In charge of organizing meeting agendas for both weekly meetings, but also
+   online meetings and events.
+ * Take notes during the meetings.
+
+### Project Manager: Joshua / Ed
+
+Oversees projects with the simulations team.
+
+ * Coordinate with the team and iGEM leadership to make sure projects are are
+   moving forward.
+ * Take lead in creating projects for the simulations team to work on.
+ * Coordinate with the Meeting Organizer
+ * Teach Will simulations
