@@ -17,6 +17,7 @@ The classic understanding of the kinetics of a system is that the rate-limiting 
 ### Rosetta
 [Rosetta](https://www.rosettacommons.org/software) is a powerful command-line program for modeling protein folding developed at the UW's Baker lab.
 ![](https://upload.wikimedia.org/wikipedia/commons/2/2b/T0281-bakerprediction_overlay.png)
+
 Proteins naturally fold into the lowest energy conformation. However, modeling this process on an atom-by-atom basis is NP-hard, and cannot be easily done without a supercomputer.
 
 Rosetta reduces the computational complexity by dividing the sequence into fragments and substituting known folding patterns of the fragments into the protein. Then, it tries random conformations in space and does a monte carlo simulation to find the lowest energy conformation. Essentially, it tries a random conformation and then makes a random change to it. If the change reduced the free energy, the simulation continues from the new conformation. If the change increased the free energy, the simulation reverts to the old conformation.
