@@ -15,7 +15,10 @@
 * Made agenda for meeting
 
 ## Tuesday, June 26
-
+### Zack
+	*Made updated chemical network model from meeting June 26th (uploaded to gitHub procedures)
+		*Still needs appropriate constant values	
+	
 ## Wednesday, June 27
 
 ## Thursday, June 28
