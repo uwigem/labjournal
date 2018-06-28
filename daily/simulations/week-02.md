@@ -25,6 +25,17 @@
 
 ## Thursday, June 28
 
+### Ed
+
+ * Reorgainze `labjournal` file structure
+   * `resources/` contains any informational files that can be useful, including:
+      * general markdown files such as judging info or the intro to simulations
+      * `books/` for any pdfs or other ebooks
+      * `procedures/` for markdown step by step guides on how to do things
+   * `daily/` should be reserved for only the daily journals, no new files should be
+      created in this folder, simply edit each weeks files.
+   * `telliurm/` is for python code using telliurm
+
 ## Friday, June 29
 
 ## Saturday, June 30
