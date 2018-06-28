@@ -25,18 +25,23 @@ Team lab journal for daily logs and procedure list.
  4. Write what you did that day under your new subsection.
  5. Add file, commit, push
 
-## Procedures
+## Resources
 
- * [Installing Rosetta](procedures/rosetta_installation.md)
- * [Making movies in Chimera](procedures/chimera_movie.md)
+ * [Simulations Introduction](resources/simulations_intro.md)
+ * [Systems Biology: Basic Pathway Modeling Techniques](resources/BioPathwayModeling.pdf)
+ * [Discrete Mathematical Modeling](resources/IntroMathModeling.pdf)
+ * [Judging](resources/judging_basics.md)
+ * **Procedures**
+   * [Installing Rosetta](resources/procedures/rosetta_installation.md)
+   * [Making movies in Chimera](resources/procedures/chimera_movie.md)
 
-### Add a procedure
+### Add a resource
 
  1. Clone this repository (`git clone https://github.com/uwigem/labjournal`).
- 2. Add your procedure to a new md file under the procedures folder (ie rosetta_installation.md)
+ 2. Add your resource as a new md file or file upload under the resources folder (ie rosetta_installation.md)
  3. Add a link to it above, following the same format
- 4. Include any pictures for your procedure in a sub-directory (ie procedures/rosetta_installation_pics)
- 5. Push
+ 4. Include any pictures for your procedure in a sub-directory (ie resources/images)
+ 5. Add files, commit, push
 
 ## Positions
 
