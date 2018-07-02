@@ -1,5 +1,5 @@
 # Author and attributions
-CIDmovie was designed by Dreycey Albin for the UW iGEM team.
+CIDmovie was designed by Dreycey Albin for the UW iGEM team. CIDmovie.mp4 can be found on the google drive.
 
 # Description
 When the movie begins, the camera pans around an dimerization nanobody and a molecule of CBD. An anchor nanobody is visible at the top of the screen. The words "UW iGEM 2018" are displayed in prominent black letters. All three molecules come together, with the CBD binding to the anchor nanobody and then the dimerization nanobody.
