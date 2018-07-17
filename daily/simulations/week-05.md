@@ -1,7 +1,9 @@
 # Simulations Week 5
 
 ## Monday, July 16
-
+### Zack
+*3D Printing Nanobody
+* gathering bionumbers for RNA transcription rate
 ## Tuesday, July 17
 
 ## Wednesday, July 18
