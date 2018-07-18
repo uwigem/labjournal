@@ -68,8 +68,10 @@ r = te.loada("""
     d_rept = 0.000138 * scalingFactor;
     
     # Initial values
-    geneOn = 1;
-    geneOff = 1;
+    avoNum = 6.02 * 10 ^ 23 
+    yeastVol = 7.3 * 10 ^ -6 # from bionumbers
+    geneOn = 1 / avoNum / yeastVol;
+    geneOff = 1 / avoNum / yeastVol;
     
     RNAOn = 0;
     RNAOff = 0;
