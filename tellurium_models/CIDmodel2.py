@@ -13,155 +13,139 @@ import antimony
 import time
 
 r = te.loada("""    
-    scalingFactor = 60 * 60;
+    J0: $AncBinDNA -> AncBinRNA ; a_rna
+    J1: $DimBinDNA -> DimBinRNA ; a_rna
+    # transcription
+    # units of RNA/sec
+    
+    J2: AncBinRNA -> ; d_rna * AncBinRNA
+    J3: DimBinRNA -> ; d_rna * DimBinRNA
+    # mRNA decay
+    # units of RNA/sec
 
-    AR1: $DNA1 -> RNA1 ; a_rna1 * DNA1
-    AR2: $DNA2 -> RNA2 ; a_rna2 * DNA2
-    # DNA to mRNA, DNA doesn't change in concentration
-
-
-    DR1: RNA1 -> ; d_rna1 * RNA1
-    DR2: RNA2 -> ; d_rna2 * RNA2
-    # mRNA degrades significantly quicker than mRNA
-
-    AN1: -> NB1 ; a_nb1 * RNA1 
-    AN2: -> NB2 ; a_nb2 * RNA2 
-    # RNA to Protein, the protein is our nanobody
-    # 
+    J4: AncBinRNA -> AncBinRNA + AncBinder ; a_nb * AncBinRNA
+    J5: DimBinRNA -> DimBinRNA + DimBinder ; a_nb * DimBinRNA
+    # translation
+    # units of RNA/sec
         
-    DN1: NB1 -> ; d_nb1 * NB1
-    DN2: NB2 -> ; d_nb2 * NB2
-    # nanobodies can degrade or be denatured
+    J6: AncBinder -> ; d_nb * AncBinder
+    J7: DimBinder -> ; d_nb * DimBinder
+    # protein decay
     
-    AC1: -> COMPOUND ; a_c 
-    DC1: COMPOUND -> ; d_c * COMPOUND
-    #Our compounds can be created or destroyed, but currently a_c
-    
-    ANBC1: COMPOUND + NB1 -> NBC1 ; a_nbc1 * COMPOUND  * NB1
-    # ANBC2: C2 + NB2 -> NBC2; a_nbc2 * C2 * NB2
-    # nanobodies bind to compound of interest
-    
-    DNBC1: NBC1 -> NB1 + COMPOUND ; d_nbc1 * NBC1
+    J8: Mol + AncBinder -> Complex ; a_NBC * (Mol / CytoplasmVol)  * (AncBinder / CytoplasmVol) - d_NBC * Complex
+    # the anchor binder binds to molecule of interest to form a complex.
     # nanobody complexes may dissociate over time
-    
-    AD: NBC1 + NB2 -> DIMER ; a_dimer * NBC1 * NB2
-    # nanobodies and nanobody-complex combine to form dimers 
-    
-    # DD: DIMER -> NBC1 + NB2 ; d_dimer * DIMER
-    # nanobodies and nanobody-complexes may degrade
-    
-    GC: DIMER + GENEOFF -> GENEON ; 
-    # Once formed, our dimer acts as a transcription factor for our gene of interest
-    
-    GD: GENEON -> GENEOFF + DIMER ;
-    # The transcription factor can unbind from the gene
-    
-    #These represent the repressilator that is activated once the gene is turned on.
-    
-    AMR1: $DNA_REP1 -> RNA_REP1 ; DNA_REP1 * a_rna_rep1
-    AMR2: $DNA_REP2 -> RNA_REP2 ; DNA_REP2 * a_rna_rep2
-    AMR3: $DNA_REP3 -> RNA_REP3 ; DNA_REP3 * a_rna_rep3
 
-    DMR1: RNA_REP1 -> ; DNA_REP1 * d_rna_rep1
-    DMR2: RNA_REP2 -> ; DNA_REP2 * d_rna_rep2
-    DMR3: RNA_REP3 -> ; DNA_REP3 * d_rna_rep3
-
-    AR1: -> REP1 ; RNA_REP1 * a_rep1
-    AR2: -> REP2 ; RNA_REP2 * a_rep2 
-    AR3: -> REP3 ; RNA_REP3 * a_rep3
-
-    DR1: REP1 -> ; REP1 * d_rep1
-    DR2: REP2 -> ; REP2 * d_rep2
-    DR3: REP3 -> ; REP3 * d_rep3
-
+    J9: Complex + DimBinder -> Dimer ; a_d * Complex * DimBinder - d_d * Dimer
+    # dimerization binder binds to complex to form dimers       
+    # dimers may dissociate, but much less often than complexes
     
-
+    J10: Dimer + GeneOff -> GeneOn; GeneOff * Dimer * a_g - GeneOn * d_g
+    # dimer acts as transcription factor for a gene
+    
+    J11: GeneOn -> GeneOn + RepRNA; a_rna * GeneOn
+    J12: RepRNA -> ; d_rna * RepRNA 
+    J13: RepRNA -> RepRNA + Rep; a_nb * RepRNA
+    J14: Rep -> ; d_nb * Rep
+    # the activated gene transcribes a reporter
+    
+    # *****************************************************************************************************************************
     # Parameters
     
-    # a_rna represents the time for mRNA to be created for the nanobody
-    # (4000 genes in E.coli K12/ 20 genes/min initiation rate) = 20 minutes for initiation by e.coli 
-    # (length of 351 nucleotides per nanobody / 45 nts/sec elongation) = 7.8 seconds for mRNA formation
-    # overall it should take 1207.8 seconds for 1 mRNA, so 1/1207.8 = 0.000828
-    a_rna1 = 0.000828 * scalingFactor; 
-    a_rna2 = 0.000828 * scalingFactor; 
+    TotalCellVol = (30.3 * 10^-6);
+    NucleusVol = (4.3 * 10^-6);
+    CytoplasmVol = TotalCellVol - NucleusVol;
+    # all volumes given in units of L, 
+    # volumes from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=106557&ver=1&trm=yeast%20cytoplasm%20volume&org=
+    
+    scalingFactor = 60 * 60;
+    # since all our rates/rate constants are in seconds, we can scale time by multiplying each time-dependent parameter by a scaling factor
+    # this particular value scales the parameters for time units of hours
+    
+    a_rna = (0.12) * scalingFactor;
+    # median transcription rate = 0.12 mRNA molecules/min
+    # median transcription rate from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=106766&ver=3&trm=transcription%20rate%20yeast&org=
+    # KEY ASSUMPTION: the rate of transcription of our nanobody gene is constant. 
+    # in reality, it may not be safe to assume that our molecule is transcribed by the median transcription rate
+    
+    d_rna = (5.6 * 10^-4) * scalingFactor;        
+    # 5.6 * 10 ^ -4 = mRNA decay rate constant in units of sec^-1
+    # mRNA decay constant found from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=105510&ver=5&trm=mrna%20s.%20cerevisiae&org=
+    
+    a_nb = (0.0185) * scalingFactor;
+    # yeast has no rough ER, so translation occurs in the cytoplasm
+    # median time for translation initiation = 4.0 * 10^2 s
+    # median elongation rate = 9.5 aa/s
+    # nanobody average amino acids = 130 aa
+    # time for elongation = (130 aa)/(9.5 aa/s) = 14 sec
+    # total time for 1 mRNA transcript = 14 sec + 40 sec = 54 sec
+    # rate at which mRNA is transcribed = 1 protein/(54 sec * 1 mRNA) / ~ 0.0185 protein/(sec mRNA)
+    # it is notable that translation initiation rate can vary between mRNA by orders of magnitude
+    # all data from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3694300/
 
-    d_rna1 = 0.00465 * scalingFactor;
-    d_rna2 = 0.00465 * scalingFactor; # half-life of 2.5 minutes, from bionumbers
+    d_nb = (2.6 * 10^-4) * scalingFactor;
+    # d_nb represents degradation of the nanobodies. Hannah found http://www.pnas.org/content/103/35/13004 (doi: https://doi.org/10.1073/pnas.0605420103) https://www.nature.com/articles/nature10098,
+    # which shows that the median half-life of a protein in a budding yeast cell is 43 minutes
+    # half-life is cop6e-4 = median rate constant of degradation of proteins in a yeast cell
     
-    a_nb1 = 0.0346 * scalingFactor;
-    a_nb2 = 0.0346 * scalingFactor; # average initiation time of 15 seconds + mean elongation time for 1 codon of 0.119 sec * 117 codons
-    d_nb1 = 0.000138 * scalingFactor;
-    d_nb2 = 0.000138 * scalingFactor; # half-life of protein at 2 hours, from bionumbers
-    
-    a_nbc1 = 6 * 10 ^ 5 * scalingFactor; # rate constant of association of antibody binding to cytochrome C
-    d_nbc1 = 8 * 10 ^ -5 * scalingFactor; # rate constant of dissociation for anitbody binding to cytochrome C   
-    
-    # a_dimer was derived from the rate constant of assocation for hemoglobin dimers, 0.4 * 10^5 
-    a_dimer = 4.0 * 10^5 * scalingFactor; 
-    #d_dimer = ?;
+    a_NBC = 6 * 10^5 * scalingFactor; 
+    d_NBC = 8 * 10^-5 * scalingFactor; 
+    # this is one of the binding affinities that we will do a parameter sweep to learn more about
+    # current stand-in value is the rate constant of association/dissociation for antibody binding to cytochrome C
 
-    # we could simulate our compound being created or destroyed, but for now we assume it is constant
-    a_c = 0 * scalingFactor; 
-    d_c = 0 * scalingFactor; 
-
+    # Binding affinity of the dimerization nanobody
+    # will be changed using a parameter sweep, units of M/s
+    a_d = 4.0 * 10^5 * scalingFactor; 
+    d_d = 8.0 * 10^-5 * scalingFactor;
     
-    #Though I used the same values here as for the nanobody itself, the promoter sequence may be stronger or weaker in a real system. 
-    #That is why I have set up a seperate variable to track the strength of the repressilator promoter.
-    a_rna_rep1 = 0.000828 * scalingFactor; 
-    a_rna_rep2 = 0.000828 * scalingFactor; 
-    a_rna_rep3 = 0.000828 * scalingFactor; 
-
-    d_rna_rep1 = 0.00465 * scalingFactor; 
-    d_rna_rep2 = 0.00465 * scalingFactor; 
-    d_rna_rep3 = 0.00465 * scalingFactor; 
+    # binding affinity of the completed transcription factor. This depends mostly on the DNA-binding domain chosen.
+    # 7.0e9 = , association constant of the lac repressor to the lac operon, units of M/s
+    a_g = 7.0 * 10 ^ 9 * scalingFactor;
     
-    a_rep1 = 0.0346 * scalingFactor;
-    a_rep2 = 0.0346 * scalingFactor;
-    a_rep3 = 0.0346 * scalingFactor;
+    # 12e-12 = k_d of Egr1 DNA binding domain, units of M/s
+    # found at http://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=5&id=104597
+    d_g = 12 * 10 ^ -12 * scalingFactor;
     
-    d_rep1 = 0.000138 * scalingFactor;
-    d_rep2 = 0.000138 * scalingFactor;
-    d_rep3 = 0.000138 * scalingFactor;
-    
-    
+    # *****************************************************************************************************************************************
     # Initial values
-    DNA1 = 1; # A colony of cells may have anywhere from 10^4 to 10^8 copies of the genome
-    DNA2 = 1;
-    COMPOUND = 100; 
-    DNA_REP1 = 1;
-    DNA_REP2 = 1;
-    DNA_REP3 = 1;
+    # These are all in copies
+    DNA1 = 1000; 
+    DNA2 = 1000;
+    Mol = 0;
+    GeneOff = 1;
     
     RNA1 = 0;
     RNA2 = 0;
     NB1 = 0;
     NB2 = 0;
-    NBC1 = 0;
-    NBC2 = 0;
-    DIMER = 0;
-    
-    RNA_REP1 = 0;
-    RNA_REP2 = 0;
-    RNA_REP3 = 0;
-    
-    REP1 = 0;
-    REP2 = 0;
-    REP3 = 0;
+    NBC = 0;
+    Dimer = 0;
     
 """)
 r.reset()
-# r.draw(width=800,height=300,overlap = "false", splines = "true")
-result = r.simulate(0,240, 1000)
-r.plot()
+r.draw(width=800,height=300,overlap = "false", splines = "true")
 
+prepertubation = r.simulate(0, 12, 1000)
+r.Mol = 50
+pertubation = r.simulate(12, 36, 1000)
+r.Mol = 0
+postpertubation = r.simulate(36, 48, 1000)
+result = numpy.vstack((prepertubation, pertubation, postpertubation))
+
+r.plot()
 plt.figure(1)
-plt.plot(result[:,0], result[:,6:8])
+plt.plot(result[:,0], result[:,1:8])
 plt.xlabel("Time (hours)")
 plt.ylabel("Copies")
-plt.legend(["Complexes", "Dimers"])
-
+plt.legend(["Anchor Binder RNA", "Dimerization Binder RNA", "Anchor Binder", "Dimerization Binder", "Molecule", "Complex", "Dimer"])
 
 plt.figure(2)
-plt.plot(result[:,0],result[:,7])
+plt.plot(result[:,0],result[:,8:10])
 plt.xlabel("Time (hours)")
-plt.ylabel("Dimers, copies")
+plt.ylabel("Copies")
+plt.legend(["GeneOff", "GeneOn"])
+
+plt.figure(3)
+plt.plot(result[:,0],result[:,11])
+plt.xlabel("Time (hours)")
+plt.ylabel("Reporter, copies")
