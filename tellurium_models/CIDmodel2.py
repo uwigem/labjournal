@@ -62,8 +62,8 @@ r = te.loada("""
     # since all our rates/rate constants are in seconds, we can scale time by multiplying each time-dependent parameter by a scaling factor
     # this particular value scales the parameters for time units of hours
     
-    a_rna = (0.12) * scalingFactor;
-    # median transcription rate = 0.12 mRNA molecules/min
+    a_rna = (0.002) * scalingFactor;
+    # median transcription rate = 0.12 mRNA molecules/min = 0.002 mRNA molecules/sec
     # median transcription rate from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=106766&ver=3&trm=transcription%20rate%20yeast&org=
     # KEY ASSUMPTION: the rate of transcription of our nanobody gene is constant. 
     # in reality, it may not be safe to assume that our molecule is transcribed by the median transcription rate
@@ -132,7 +132,6 @@ r.Mol = 0
 postpertubation = r.simulate(36, 48, 1000)
 result = numpy.vstack((prepertubation, pertubation, postpertubation))
 
-r.plot()
 plt.figure(1)
 plt.plot(result[:,0], result[:,1:8])
 plt.xlabel("Time (hours)")
