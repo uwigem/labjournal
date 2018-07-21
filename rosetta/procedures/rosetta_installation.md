@@ -1,3 +1,18 @@
+# Installing PyRosetta
+
+1. Download PyRosetta from: https://els.comotion.uw.edu/express_license_technologies/pyrosetta
+   - Under "Academic License" click the "License" button
+   - Fill out the required information and click "Execute License"
+   - Wait for email with download link and login information
+   - From download link choose your OS and python version (python 3.5
+     recommended), then the latest version of PyRosetta
+2. Unpack downloaded file
+3. `cd` into generated folder
+4. `cd setup`
+5. `python setup.py install`
+6. To test to make sure PyRosetta installed corrected open python and type
+   `import pyrosetta` and then `pyrosetta.init()`
+
 # Installing Rosetta on Windows via Ubuntu VM
 
 Installing linux + vmware:
