@@ -123,10 +123,11 @@ r = te.loada("""
     
 """)
 r.reset()
-r.draw(width=800,height=300,overlap = "false", splines = "true")
+#r.draw(width=800,height=300,overlap = "false", splines = "true")
 
 prepertubation = r.simulate(0, 12, 1000)
-r.Mol = 50
+
+r.x[0] = 50
 pertubation = r.simulate(12, 36, 1000)
 r.Mol = 0
 postpertubation = r.simulate(36, 48, 1000)
