@@ -32,9 +32,6 @@ Team lab journal for daily logs and procedure list.
  * **Books**
    * [Systems Biology: Basic Pathway Modeling Techniques](resources/books/BioPathwayModeling.pdf)
    * [Discrete Mathematical Modeling](resources/books/IntroMathModeling.pdf)
- * **Procedures**
-   * [Installing Rosetta](resources/procedures/rosetta_installation.md)
-   * [Making movies in Chimera](resources/procedures/chimera_movie.md)
 
 ### Add a resource
 
