@@ -30,17 +30,20 @@ r = te.loada("""
         
     J6: AncBinder -> ; d_nb * AncBinder
     J7: DimBinder -> ; d_nb * DimBinder
+    J15: Dimer -> DecDimer; d_nb * Dimer
     # protein decay
     
-    J8: Mol + AncBinder -> Complex ; a_NBC * (Mol / CytoplasmVol)  * (AncBinder / CytoplasmVol) - d_NBC * Complex
+
+    
+    J8: Mol + AncBinder -> Complex ; a_NBC * (Mol / CytoplasmVol)  * (AncBinder / CytoplasmVol) - d_NBC * (Complex / CytoplasmVol)
     # the anchor binder binds to molecule of interest to form a complex.
     # nanobody complexes may dissociate over time
 
-    J9: Complex + DimBinder -> Dimer ; a_d * Complex * DimBinder - d_d * Dimer
+    J9: Complex + DimBinder -> Dimer ; a_d * (Complex / CytoplasmVol) * (DimBinder / CytoplasmVol) - d_d * (Dimer / CytoplasmVol)
     # dimerization binder binds to complex to form dimers       
     # dimers may dissociate, but much less often than complexes
     
-    J10: Dimer + GeneOff -> GeneOn; GeneOff * Dimer * a_g - GeneOn * d_g
+    J10: Dimer + GeneOff -> GeneOn; (GeneOff / NucleusVol) * (Dimer / NucleusVol) * a_g - (GeneOn / NucleusVol) * d_g
     # dimer acts as transcription factor for a gene
     
     J11: GeneOn -> GeneOn + RepRNA; a_rna * GeneOn
@@ -83,20 +86,20 @@ r = te.loada("""
     # it is notable that translation initiation rate can vary between mRNA by orders of magnitude
     # all data from https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3694300/
 
-    d_nb = (2.6 * 10^-4) * scalingFactor;
+    d_nb = (2.6 * 10^-4) * 5 * scalingFactor;
     # d_nb represents degradation of the nanobodies. Hannah found http://www.pnas.org/content/103/35/13004 (doi: https://doi.org/10.1073/pnas.0605420103) https://www.nature.com/articles/nature10098,
     # which shows that the median half-life of a protein in a budding yeast cell is 43 minutes
     # half-life is cop6e-4 = median rate constant of degradation of proteins in a yeast cell
     
-    a_NBC = 6 * 10^5 * scalingFactor; 
-    d_NBC = 8 * 10^-5 * scalingFactor; 
+    a_NBC = 0.05 * 10^6 * scalingFactor; 
+    d_NBC = 20 * 10^-6 * scalingFactor; 
     # this is one of the binding affinities that we will do a parameter sweep to learn more about
     # current stand-in value is the rate constant of association/dissociation for antibody binding to cytochrome C
 
     # Binding affinity of the dimerization nanobody
     # will be changed using a parameter sweep, units of M/s
-    a_d = 4.0 * 10^5 * scalingFactor; 
-    d_d = 8.0 * 10^-5 * scalingFactor;
+    a_d = 0.01 * 10^5 * scalingFactor; 
+    d_d = 100 * 10^-5 * scalingFactor;
     
     # binding affinity of the completed transcription factor. This depends mostly on the DNA-binding domain chosen.
     # 7.0e9 = , association constant of the lac repressor to the lac operon, units of M/s
@@ -109,27 +112,20 @@ r = te.loada("""
     # *****************************************************************************************************************************************
     # Initial values
     # These are all in copies
-    DNA1 = 1000; 
-    DNA2 = 1000;
+    AncBinDNA = 1; 
+    DimBinDNA = 1;
     Mol = 0;
     GeneOff = 1;
-    
-    RNA1 = 0;
-    RNA2 = 0;
-    NB1 = 0;
-    NB2 = 0;
-    NBC = 0;
-    Dimer = 0;
     
 """)
 r.reset()
 r.draw(width=800,height=300,overlap = "false", splines = "true")
 
-prepertubation = r.simulate(0, 12, 1000)
+prepertubation = r.simulate(0, 1, 10000)
 r.Mol = 50
-pertubation = r.simulate(12, 36, 1000)
-r.Mol = 0
-postpertubation = r.simulate(36, 48, 1000)
+pertubation = r.simulate(1, 2, 10000)
+#r.Mol = 0
+postpertubation = r.simulate(2, 10, 10000)
 result = numpy.vstack((prepertubation, pertubation, postpertubation))
 
 plt.figure(1)
