@@ -87,8 +87,8 @@ r.indOn = 50
 pertubation = r.simulate(12, 36, 1000)
 r.indOn = 0
 r.indOff = 50
-postpertubation = r.simulate(36, 48, 1000)
-result = numpy.vstack((prepertubation, pertubation, postpertubation))
+postpertubation = r.simulate(36, 900, 10000)
+result = np.vstack((prepertubation, pertubation, postpertubation))
 
 plt.figure(1)
 plt.plot(result[:,0],result[:,7])
