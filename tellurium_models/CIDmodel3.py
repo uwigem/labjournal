@@ -141,12 +141,8 @@ antimonyString = ("""
     # data from http://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=5&id=104597
 
     
-    diffusion_rna = 1.0 * 10^-1;
-    # Where do we get this?
-    
-    
-    diffusion_nb = 0.3;
-    # 
+    diffusion_rna = 1.0 * 10^-1;     
+    diffusion_nb = 0.3; 
     
     # *****************************************************************************************************************************************
     # Initial values
