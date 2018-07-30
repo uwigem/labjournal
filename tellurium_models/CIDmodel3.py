@@ -13,7 +13,7 @@ from tellurium import ParameterScan as ps
 import roadrunner
 import antimony
 import time
-
+import math
 
 antimonyString = ("""    
     J0: $AncDNA -> AncRNANuc ; a_rna * AncDNA
@@ -160,8 +160,43 @@ antimonyString = ("""
     
 """);
 
-r = te.loadAntimonyModel(antimonyString)
+r = te.loadAntimonyModel(antimonyString)      
 #r.draw(width = '1800')
 #, 
 r.simulate(0, 48, 1000, ["time", "Rep", "GeneOff", "GeneOn", "Mol"])
-r.plot()
+r.plot()              
+
+    
+# uncertainty modeling
+def plot_param_uncertainty(model, startVal, name, num_sims):
+    stdDev = math.fabs(0.5*startVal) #0.75
+    #vals = np.linspace((1-stdDev)*startVal, (1+stdDev)*startVal, 100)
+    vals = np.random.normal(loc = startVal, scale=stdDev, size = (num_sims, ))
+    for val in vals:
+        exec("r.%s = %d" % (name, val))
+        result = r.simulate(0, .5, 1000)
+        r.reset();
+        plt.plot(result[:,0],result[:,3]) #this is our production measurement
+    #plt.title("param: " + name)
+    plt.legend([name])
+    #plt.xlabel("Time (minutes)")
+    #plt.ylabel("Conc")
+    #plt.ylim([0, 4*10**-5])
+    #plt.xlim([0, 0.5])
+
+
+startVals = r.getGlobalParameterValues();
+names = r.getGlobalParameterIds();
+n = len(names)
+dim = math.ceil(math.sqrt(n))
+
+plt.figure(2)
+for i in range(1,n + 1):
+    plt.subplot(int(dim),int(dim), i)
+    plot_param_uncertainty(r, startVals[i-1], names[i-1], 100)
+       
+#plt.tight_layout();    
+plt.rcParams.update({'font.size': 5})       
+plt.gcf().set_size_inches(10,10)
+plt.show()
+
