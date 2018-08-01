@@ -6,36 +6,29 @@
 # Nanobody concentrations based on a protein's average concentration in cell.
 # Molecule concentration as an arbitrary number.
 # Gene kinetic rates and concentrations fudged.
-import numpy as np
-import matplotlib.pyplot as plt
+"""
+Tellurium oscillation
+"""
 import tellurium as te
-from tellurium import ParameterScan as ps
 import roadrunner
 import antimony
-import time
-r = te.loada('''
-    J1: $Xo -> x; 0.1 + k1*x^4/(k2+x^4);
-    x -> $w; k3*x;
 
-    k1 = 0.9;
-    k2 = 0.3;
-    k3 = 0.7;
-    x = 0;
-''')
+r = te.loada ('''
+model feedback()
+  // Reactions:
+  J0: Nan1 + Mol -> Nan1Mol; (K1*Nan1*Mol);
+  J1: Nan1Mol -> Nan1 + Mol; (K_1*Nan1Mol); 
+  J2: Nan1Mol + Nan2 -> Nan1MolNan2; (K2*Nan1Mol*Nan2)
+  J3: Nan1MolNan2 + GeneOff -> GeneOn; (K3*Nan1MolNan2*GeneOff);
+  //J4: GeneOn -> Nan1MolNan2 + GeneOff; (K_3*GeneOn);
 
-p = te.ParameterScan(r,
-    # settings
-    startTime = 0,
-    endTime = 15,
-    numberOfPoints = 50,
-    polyNumber = 10,
-    endValue = 1.8,
-    alpha = 0.8,
-    value = "x",
-    selection = "x",
-    color = ['#0F0F3D', '#141452', '#1A1A66', '#1F1F7A', '#24248F', '#2929A3',
-               '#2E2EB8', '#3333CC', '#4747D1', '#5C5CD6']
-)
-# plot
+  // Species initializations:
+  Nan1 = 0.0001692; Mol = 0.0001692/2; Nan2 = 0.0001692; Nan1Mol = 0;
+  Nan1MolNan2 = 0; GeneOff = 5*10^-5; GeneOn = 0;
 
-p.plotSurface()
+  // Variable initialization:
+  K1 = 6.1*10^5; K_1 = 8*10^-5; K2 = 3.3*10^5; K3 = 1*10^5; K_3 = 0;
+end''')
+
+result = r.simulate(0, .5, 1000)
+r.plot(result)

@@ -151,17 +151,59 @@ antimonyString = ("""
     DimDNA = 1;
     Mol = 0;
     GeneOff = 1;
-    Setting = 50;
+    MoleculeAdded = 50;
+    
+    # We don't strictly need to initialize all these additional variables, but doing so supresses errors when using gillespie for stochastic simulations
+    AncRNANuc = 0;
+    AncRNACyt = 0;
+    DimRNANuc = 0;
+    DimRNACyt = 0;
+    AncBinder = 0;
+    DimBinder = 0;
+    Complex = 0;
+    DimerCyt = 0;
+    DimerNuc = 0;
+    GeneOn = 0;
+    RepRNANuc = 0;
+    RepRNACyt = 0;
+    Rep = 0;    
+    
+
+    # this makes it so that the molecule is added at the appropriate time    
+    at time >= 8: Mol=MoleculeAdded;
     
     
-    at time>=4: Mol=Setting;
     
 
     
 """);
+#r.simulate(0, 48, 1000, ["time", "Rep", "GeneOff", "GeneOn", "Mol"])
 
-r = te.loadAntimonyModel(antimonyString)
-#r.draw(width = '1800')
-#, 
-r.simulate(0, 48, 1000, ["time", "Rep", "GeneOff", "GeneOn", "Mol"])
-r.plot()
+r = te.loadAntimonyModel(antimonyString);
+r.integrator = 'gillespie';
+r.integrator.seed = 1234;
+r.integrator.variable_step_size = False;
+
+# selections specifies the output variables in a simulation
+selections = ['time', 'AncBinder', 'DimBinder', 'Complex', 'GeneOn', 'Rep'] 
+numberOfOutputs = len(selections)
+timesToSimulate = 4;
+pointsToSimulate = 101;
+sumOfSimulations = np.zeros(shape = [pointsToSimulate, numberOfOutputs])
+
+for k in range(timesToSimulate):
+    r.resetToOrigin()
+    currentSim = r.simulate(0, 24, pointsToSimulate, selections)
+    
+    # we record the sum of the simulations to calculate the average later
+    sumOfSimulations += currentSim
+
+    # since show = false, each trace is added to the current plot instead of starting a new one
+    # this is analogous to MATLAB hold on. Alpha causes the opacity to be 50%, so the new lines won't crowd each other out
+    r.plot(currentSim, alpha = 0.5, show = False)
+
+# adds the mean curve for each specified selection. Adds legend, titles, labels to the plot.
+fig = te.plot(currentSim[:, 0], sumOfSimulations[:,1:]/timesToSimulate, 
+              names = [x + ' (mean)' for x in selections[1:]], 
+              title = "Stochastic simulation", 
+              xtitle = "time", ytitle = "copies" )
