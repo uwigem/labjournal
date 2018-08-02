@@ -12,7 +12,7 @@ import roadrunner
 import antimony
 import time
 
-# notes to consider: 
+# notes to consider:
 # I have added in to the model the fact that rna is not used up as protein is made.
 # we also need to consider whether we want G_on to be used up (I have decided yes for now)
 
@@ -29,20 +29,20 @@ r = te.loada("""
     J7: P ->  ;         d_p*P                          # degradation protein
     J8: rna ->  ;       d_r*rna                         # degradation rna
     J9: G_on -> G_off + C2; k_3*G_on
-    
+
     # Parameters
     a_r = 10; d_r = 1    #prod and deg of mRNA
     a_p = 500; d_p = 10     #prod and deg of protein
     k1 = 10               #not accurate
-    k_1 =  0.01              #not accurate   
+    k_1 =  0.01              #not accurate
     k2 = 12               #not accurate
     k_2 = 0.0001              #not accurate
     k3 = 5               #not accurate
     k_3 = 0.1               #not accurate
-    
-    
+
+
     # Initial values (every variable needs I.V.)
-    M = 0.0001692/2   #arbitrary: we chooose (CBD)
+    M = 0.0001692/2   #arbitrary: we choose (molecule x)
     Na = 0.0001692    #from Dallas's model
     Nd = 0.0001692     #from Dallas's model
     C1 = 0
@@ -54,9 +54,9 @@ r = te.loada("""
 """)
 
 #clears out any previous simulation results if it exists
-r.reset() 
+r.reset()
 
-#the simulation is run, and is saved in "r.model", 
+#the simulation is run, and is saved in "r.model",
 #but results are also stored in "result."
 result = r.simulate(0,100000,1000) #(start, end, timepoints)
 r.plot(result)
