@@ -9,11 +9,8 @@
 """
 Tellurium oscillation
 """
-import tellurium as te
-import roadrunner
-import antimony
 
-r = te.loada ('''
+antimonyString = ('''
 model feedback()
   // Reactions:
   J0: Nan1 + Mol -> Nan1Mol; (K1*Nan1*Mol);
@@ -29,6 +26,3 @@ model feedback()
   // Variable initialization:
   K1 = 6.1*10^5; K_1 = 8*10^-5; K2 = 3.3*10^5; K3 = 1*10^5; K_3 = 0;
 end''')
-
-result = r.simulate(0, .5, 1000)
-r.plot(result)
