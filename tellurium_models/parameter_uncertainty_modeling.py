@@ -55,7 +55,7 @@ def plot_param_uncertainty(model, startVal, name, num_sims):
     #vals = np.linspace((1-stdDev)*startVal, (1+stdDev)*startVal, 100)
     vals = np.random.normal(loc = startVal, scale=stdDev, size = (num_sims, ))
     for val in vals:
-        exec("r.%s = %d" % (name, val))
+        exec("r.%s = %f" % (name, val))
         result = r.simulate(0, .5, 1000)
         r.reset();
         plt.plot(result[:,0],result[:,7])
