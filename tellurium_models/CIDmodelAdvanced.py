@@ -163,7 +163,4 @@ antimonyString = ("""
     at time >= 5 * 60 * 60: MoleculeMedium = MoleculeAdded;
     
     
-    
-
-    
 """);
