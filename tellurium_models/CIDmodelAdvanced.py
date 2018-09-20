@@ -1,20 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 30 16:39:36 2018
-
-@author: Joshua Ip - Work
-"""
-
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-import tellurium as te
-from tellurium import ParameterScan as ps
-import roadrunner
-import antimony
-import time
-import math
-
 antimonyString = ("""    
     J0: $AncDNA -> AncRNANuc ; a_rna * AncDNA
     J1: $DimDNA -> DimRNANuc ; a_rna * DimDNA
@@ -46,7 +29,9 @@ antimonyString = ("""
     # protein decay
     # units of (1 / sec) * (protein copies) = (protein copies / sec)
     
-    J14: Mol + AncBinder -> Complex ;  k_on_anchor_binder * Mol * AncBinder -  k_off_anchor_binder * Complex
+    J14: MoleculeMedium -> MoleculeCyt ; (MoleculeMedium - MoleculeCyt) * diffusion_mol
+    
+    J29: MoleculeCyt + AncBinder -> Complex ;  k_on_anchor_binder * MoleculeCyt * AncBinder -  k_off_anchor_binder * Complex
     # the anchor binder binds to molecule of interest to form a complex.
     # nanobody complexes may dissociate over time
     # units for forward reaction: (1 / (mols / liter) * sec) / (copies / mol)  / liters * copies * copies = copies / sec
@@ -88,7 +73,7 @@ antimonyString = ("""
     # all volumes given in units of L, 
     # volumes from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=106557&ver=1&trm=yeast%20cytoplasm%20volume&org=
     
-    scalingFactor = 60 * 60;
+    scalingFactor = 1;
     # since all our rates/rate constants are in seconds, we can scale time by multiplying each time-dependent parameter by a scaling factor
     # this particular value scales the parameters for time units of hours
     
@@ -118,16 +103,18 @@ antimonyString = ("""
     # median rate constant of degradation of proteins in a yeast cell = 2.6e-4 1/sec
     # data from http://www.pnas.org/content/103/35/13004 (doi: https://doi.org/10.1073/pnas.0605420103) https://www.nature.com/articles/nature10098,
     
+    K_d_anchor_binder = 20 * 10^-6 * scalingFactor;
     k_on_anchor_binder = 4.0 * 10^5 * scalingFactor;
-    k_off_anchor_binder = 80 * 10^(-1) * scalingFactor;
+    k_off_anchor_binder = K_d_anchor_binder * k_on_anchor_binder * scalingFactor;
     # k_on of antibody-binding to cytochrome C = (4.0 +- 0.3) * 10^5 1/(M * sec)
     # From gu's data, K_d of anchor binder binding = 20 * 10^-6, units of M
     # K_d = k_off / k_on, therefore k_off = K_d * k_on
     # 4.0 * 10^5 1/(M * sec) * (20 * 10^-6 M) = 80 * 10^-1 (sec^-1)
     # this is one of the binding affinities that we will do a parameter sweep to learn more about
     
+    K_d_dimerization_binder = 1 * 10^-7 * scalingFactor;
     k_on_dimerization_binder = 4.0 * 10^5 * scalingFactor;
-    k_off_dimerization_binder = 400 * 10^(-1) * scalingFactor;
+    k_off_dimerization_binder = K_d_dimerization_binder * k_on_dimerization_binder * scalingFactor;
     # k_on of antibody-binding to cytochrome C = (4.0 +- 0.3) * 10^5, units of 1/(M * sec)
     # from Gu's data, K_d of dimerization binder binding = 100 * 10^-9, units of M
     # K_d = k_off / k_on, therefore k_off = K_d * k_on
@@ -143,6 +130,7 @@ antimonyString = ("""
     
     diffusion_rna = 1.0 * 10^-1;     
     diffusion_nb = 0.3; 
+    diffusion_mol = 1.8 * 10^-2
     
     # *****************************************************************************************************************************************
     # Initial values
@@ -151,12 +139,29 @@ antimonyString = ("""
     DimDNA = 1;
     Mol = 0;
     GeneOff = 1;
-    Setting = 50;
+    MoleculeAdded = 0;
     
-    
-    at time>=4: Mol=Setting;
+    # We don't strictly need to initialize all these additional variables, but doing so supresses errors when using gillespie for stochastic simulations
+    AncRNANuc = 0;
+    AncRNACyt = 0;
+    DimRNANuc = 0;
+    DimRNACyt = 0;
+    AncBinder = 0;
+    DimBinder = 0;
+    Complex = 0;
+    DimerCyt = 0;
+    DimerNuc = 0;
+    GeneOn = 0;
+    RepRNANuc = 0;
+    RepRNACyt = 0;
+    Rep = 0;    
+    MoleculeCyt = 0;
+    MoleculeMedium = 0;
     
 
+    # this makes it so that the molecule is added at the appropriate time    
+    at time >= 5 * 60 * 60: MoleculeMedium = MoleculeAdded;
+    
     
 """);
 
@@ -167,7 +172,7 @@ def plot_param_uncertainty(model, startVal, name, num_sims):
     #vals = np.linspace((1-stdDev)*startVal, (1+stdDev)*startVal, 100)
     vals = np.random.normal(loc = startVal, scale=stdDev, size = (num_sims, ))
     for val in vals:
-        exec("r.%s = %d" % (name, val))
+        exec("r.%s = %f" % (name, val))
         result = r.simulate(0, 0.5, 1000)
         r.reset();
         r.resetAll();

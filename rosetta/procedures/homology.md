@@ -14,16 +14,16 @@ users to quickly flow through the Dunbrack rotamer library, replacing residues
 while reducing clashing using a decision tree. It worked very quickly and
 seemed to be an ideal option for homology modeling.
 
-## Sequences Given From Shoukai
+## Sequences
 
 CDR1/CDR2/CDR3 are in bold, in order
 
- * 1st Binder Sequences
-   * CBD1-N1: EVQLQASGGGFVQPGGSLRLSCAASG**STSRQYD**MGWFRQAPGKEREFVSAIS**SNQDQPP**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**FKQHHANGA**YWGQGTQVTVSS
- * 2nd Binder Sequences
-   * CBD1-N1: EVQLQASGGGFVQPGGSLRLSCAASG**RFSWGEE**MGWFRQAPGKEREFVSAIS**WAATPWQ**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**DEWHIGHVS**YWGQGTQVTVSS
-   * CBD1-N2: EVQLQASGGGFVQPGGSLRLSCAASG**YTSFQYV**MGWFRQAPGKEREFVSAIS**WLNGQVH**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**SMVFDHPQSGGGVET**YWGQGTQVTVSS
-   * CBD1-N3: EVQLQASGGGFVQPGGSLRLSCAASG**DSWELEA**MGWFRQAPGKEREFVSAIS**WHPTQWS**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**QPGFDIPDR**YWGQGTQVTVSS
+ * Anchor Nanobody Sequences
+   * molxa1: EVQLQASGGGFVQPGGSLRLSCAASG**STSRQYD**MGWFRQAPGKEREFVSAIS**SNQDQPP**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**FKQHHANGA**YWGQGTQVTVSS
+ * Dimerize Nanobody Sequences
+   * molxd1: EVQLQASGGGFVQPGGSLRLSCAASG**RFSWGEE**MGWFRQAPGKEREFVSAIS**WAATPWQ**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**DEWHIGHVS**YWGQGTQVTVSS
+   * molxd2: EVQLQASGGGFVQPGGSLRLSCAASG**YTSFQYV**MGWFRQAPGKEREFVSAIS**WLNGQVH**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**SMVFDHPQSGGGVET**YWGQGTQVTVSS
+   * molxd3: EVQLQASGGGFVQPGGSLRLSCAASG**DSWELEA**MGWFRQAPGKEREFVSAIS**WHPTQWS**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**QPGFDIPDR**YWGQGTQVTVSS
 
 
 ## Using Chimera
@@ -33,7 +33,7 @@ Nanobody-anti-VGLUT nanobody complex http://www.rcsb.org/structure/5OCL
 website with tutorial (swapaa command can be used to accomplish this goal):
 http://plato.cgl.ucsf.edu/pipermail/chimera-users/2009-April/003774.html
 
-Using Sequence 2nd CBD1-N1 protein
+Using Sequence molxd1 protein
 
 Starting Nanobody Structure:
 GPSQGQLVESGGGLVQAGGSLRLSCAASGIIFRELGIDWYRQAPGKQRELVASIASAGMTNYADSVKGRFTISRDNAKNTVYLQMNSLKPEDTAVYYCHTLPRFSHLWGQGTRVTVSS
@@ -55,7 +55,7 @@ The desired nanobody is shown in Green.
 
  * [sequence of model (input) PDB:](https://www.rcsb.org/structure/4KSD)
    * QVQLQESGGGLVQAGGSLRLSCAASGRTFNSAVMGWFRQAPGKERQFVATIDWSGEYTYYADSVKGRFTISRDNAKNTVYLQMTSLKPEDTALYYCAARLTLGQFDYWGQGTQVTVSSHHHHHH
- * Sequence wanted (2nd CBD1-N1 protein):
+ * Sequence wanted (molxd1 protein):
    * EVQLQASGGGFVQPGGSLRLSCAASG**RFSWGEE**MGWFRQAPGKEREFVSAIS**WAATPWQ**YYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCA**DEWHIGHVS**YWGQGTQVTVSS
  * Input sequence for sequence restrictions:
    * EvqlqAsgggFvqPggslrlscaasgrFSWGEEmgwfrqapgkerEfvSAiSwAAPWQyyadsvkgrftisrdnSkntvylqmNslRAedtaTyycaDWHITgHVSywgqgtqvtvsshhhhhh
@@ -72,7 +72,7 @@ Note there was one amino acid difference in 3rd bold region.
 
 This method was way faster than using chimera command line swapaa command for each mutation to homologous backbone construct.
 
-## MAKING ALL THE MODELS USING SCWRL4
+## Making all the models using SCWRL4
 
 ### Overall Method:
 
@@ -83,7 +83,7 @@ This method was way faster than using chimera command line swapaa command for ea
  5. Make input sequence file. Lower case residues will stay constant, uppercase will be replaced
  6. Enter command in for SCWRL4, as shown below in the examples.
 
-### 2nd CBD1-N2 Protein
+### molxd2 Protein
 
 #### Sequence wanted:
 
@@ -115,7 +115,7 @@ Scwrl4.exe -i nanobody_from_5LHR.pdb -s sequencefile_2.txt -o nanobody_2_2
 
 EVQLQASGGGFVQPGGSLRLSCAASGYTSFQYVMGWFRQAPGKEREFVSAISWLNGQVHYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCASDHPQSGGGVETYWGQGTQ
 
-### 2nd CBD1-N3 Protein
+### molxd3 Protein
 
 #### Sequences wanted:
 
@@ -151,7 +151,7 @@ Scwrl4.exe -i nanobody_from_5LHR.pdb -s sequencefile_3.txt -o nanobody_2_3
 
 EVQLQASGGGFVQPGGSLRLSCAASGDSWELEAMGWFRQAPGKEREFVSAISWHPTQWSYYADSVKGRFTISRDNSKNTVYLQMNSLRAEDTATYYCAADLQPGFDIPDRYWGQGT
 
-### 1st CBD1-N1 Protein
+### molxa1 Protein
 
 #### Sequences wanted:
 

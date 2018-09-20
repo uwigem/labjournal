@@ -5,16 +5,6 @@ Created on Wed May 30 16:39:36 2018
 @author: Joshua Ip - Work
 """
 
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-import tellurium as te
-from tellurium import ParameterScan as ps
-import roadrunner
-import antimony
-import time
-
-
 antimonyString = ("""    
     J0: $AncDNA -> AncRNANuc ; a_rna * AncDNA
     J1: $DimDNA -> DimRNANuc ; a_rna * DimDNA
@@ -157,9 +147,3 @@ antimonyString = ("""
 
     
 """);
-
-r = te.loadAntimonyModel(antimonyString)
-#r.draw(width = '1800')
-#, ["time", "Rep", "J18", "GeneOff", "GeneOn", "Mol"]
-r.simulate(0, 480, 10000)
-r.plot()
