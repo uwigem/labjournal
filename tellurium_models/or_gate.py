@@ -3,7 +3,7 @@ import roadrunner
 from CIDmodelBasic import *
 import matplotlib.pyplot as plt
 
-CID_reaction = antimonyString
+CID_reaction = antimonyString #imported from CIDmodelBasic
 
 
 or_gate = ('''
