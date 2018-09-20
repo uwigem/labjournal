@@ -10,11 +10,6 @@ antimonyString = ("""
     J1: $DimDNA -> DimRNANuc ; a_rna * DimDNA
     # transcription
     # units of (mRNA copies)/(sec)
-
-    J3: AncRNANuc -> AncRNACyt ; diffusion_rna * AncRNANuc - diffusion_rna * AncRNACyt   
-    J2: DimRNANuc -> DimRNACyt ; diffusion_rna * DimRNANuc - diffusion_rna * DimRNACyt
-    # mRNA transport out of the nucleus into the cytoplasm
-    # units of (mRNA copies)/(sec)
     
     J4: AncRNACyt -> ; d_rna * AncRNACyt
     J5: DimRNACyt -> ; d_rna * DimRNACyt
@@ -70,12 +65,10 @@ antimonyString = ("""
     AvoNum = 6.02 * 10^23;
     
     TotalCellVol = 30.3 * 10^(-6);
-    NucleusVol = 4.3 * 10^(-6);
-    CytoplasmVol = TotalCellVol - NucleusVol;
     # all volumes given in units of L, 
     # volumes from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=106557&ver=1&trm=yeast%20cytoplasm%20volume&org=
     
-    scalingFactor = 60 * 60;
+    scalingFactor = 1;
     # since all our rates/rate constants are in seconds, we can scale time by multiplying each time-dependent parameter by a scaling factor
     # this particular value scales the parameters for time units of hours
     
@@ -90,7 +83,7 @@ antimonyString = ("""
     # mRNA decay constant found from http://bionumbers.hms.harvard.edu/bionumber.aspx?id=105510&ver=5&trm=mrna%20s.%20cerevisiae&org=
     
     a_nb = (0.0185) * scalingFactor;
-    # yeast has no rough ER, so translation occurs in the cytoplasm
+    # bacterial translation occurs in the volume of the cell itself
     # median time for translation initiation = 4.0 * 10^2 s * mRNA / protein
     # median elongation rate = 9.5 aa/s
     # nanobody average amino acids = 130 aa
@@ -127,11 +120,6 @@ antimonyString = ("""
     # k_off of EGr1 DNA binding domain = 1.11 * 10^-3, units of 1/sec
     # data from http://bionumbers.hms.harvard.edu/bionumber.aspx?s=n&v=5&id=104597
 
-    
-    diffusion_rna = 1;
-    diffusion_nb = 3;
-    # Where do we get this?
-    
     # *****************************************************************************************************************************************
     # Initial values
     # These are all in copies
